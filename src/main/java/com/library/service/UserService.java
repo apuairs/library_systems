@@ -14,7 +14,21 @@ public class UserService {
     private UserDAO userDAO = new UserDAO();
     
     public User login(String username, String password) {
+        System.out.println("=== 登录调试 ===");
+        System.out.println("输入用户名: " + username);
+        System.out.println("输入密码: " + password);
+        System.out.println("输入密码MD5: " + MD5Util.encrypt(password));
+        
         User user = userDAO.findByUsername(username);
+        if (user != null) {
+            System.out.println("找到用户: " + user.getUsername());
+            System.out.println("数据库密码MD5: " + user.getPassword());
+            System.out.println("用户状态: " + user.getStatus());
+            System.out.println("密码匹配: " + user.getPassword().equals(MD5Util.encrypt(password)));
+        } else {
+            System.out.println("未找到用户: " + username);
+        }
+        System.out.println("=== 结束 ===");
         if (user != null && user.getPassword().equals(MD5Util.encrypt(password))) {
             if (user.getStatus() == 0) {
                 if (user.isFrozen()) {

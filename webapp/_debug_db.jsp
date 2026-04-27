@@ -34,8 +34,8 @@
         out.println("</table>");
         
         out.println("<h3>MD5测试:</h3>");
-        out.println("<p>'123456'的MD5值: " + MD5Util.encode("123456") + "</p>");
-        out.println("<p>'admin123'的MD5值: " + MD5Util.encode("admin123") + "</p>");
+        out.println("<p>'123456'的MD5值: " + MD5Util.encrypt("123456") + "</p>");
+        out.println("<p>'admin123'的MD5值: " + MD5Util.encrypt("admin123") + "</p>");
         
     } catch (Exception e) {
         out.println("<p style='color:red;'>❌ 数据库连接失败: " + e.getMessage() + "</p>");

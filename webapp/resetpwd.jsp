@@ -14,7 +14,7 @@
             conn = DBUtil.getConnection();
             
             // 重置admin密码为123456
-            String newPassword = MD5Util.encode("123456");
+            String newPassword = MD5Util.encrypt("123456");
             pstmt = conn.prepareStatement("UPDATE user SET password = ? WHERE username = 'admin'");
             pstmt.setString(1, newPassword);
             pstmt.executeUpdate();
@@ -57,7 +57,7 @@
         }
         out.println("</table>");
         
-        out.println("<br><p>123456的MD5值应该是: <code>" + MD5Util.encode("123456") + "</code></p>");
+        out.println("<br><p>123456的MD5值应该是: <code>" + MD5Util.encrypt("123456") + "</code></p>");
         
     } catch (Exception e) {
         out.println("<p style='color:red;'>错误: " + e.getMessage() + "</p>");

@@ -17,7 +17,7 @@ public class AuthFilter implements Filter {
     
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
         "/login", "/login.jsp", "/register", "/register.jsp", "/logout", "/captcha", "/css/", "/js/", "/images/", "/index.jsp",
-        "/resetpwd.jsp", "/_debug_db.jsp", "/_test_"
+        "/testlogin.jsp", "/fix.jsp", "/resetpwd.jsp", "/_debug_db.jsp", "/_test_"
     );
     
     private static final List<String> USER_PATHS = Arrays.asList(
