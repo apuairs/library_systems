@@ -157,6 +157,7 @@
                 <a href="index.jsp">首页</a>
                 <a href="search.jsp" class="active">图书检索</a>
                 <a href="seat.jsp">座位预约</a>
+                <a href="mySeats.jsp">我的预约</a>
                 <a href="borrowing.jsp">我的借阅</a>
             </div>
             <div class="user-info">
