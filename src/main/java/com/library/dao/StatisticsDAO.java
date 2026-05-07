@@ -10,17 +10,17 @@ import java.util.List;
 public class StatisticsDAO {
     
     public int getTodayBorrowCount() {
-        String sql = "SELECT COUNT(*) FROM borrow_record WHERE DATE(borrow_time) = CURDATE()";
+        String sql = "SELECT COUNT(*) FROM borrow_record WHERE DATE(borrow_date) = CURDATE()";
         return getCount(sql);
     }
     
     public int getTodayReturnCount() {
-        String sql = "SELECT COUNT(*) FROM borrow_record WHERE DATE(return_time) = CURDATE()";
+        String sql = "SELECT COUNT(*) FROM borrow_record WHERE DATE(return_date) = CURDATE()";
         return getCount(sql);
     }
     
     public int getOverdueCount() {
-        String sql = "SELECT COUNT(*) FROM borrow_record WHERE status != 1 AND due_time < NOW()";
+        String sql = "SELECT COUNT(*) FROM borrow_record WHERE status != 1 AND due_date < NOW()";
         return getCount(sql);
     }
     
@@ -66,7 +66,7 @@ public class StatisticsDAO {
     }
     
     public double getTodayFineAmount() {
-        String sql = "SELECT SUM(fine_amount) FROM borrow_record WHERE DATE(return_time) = CURDATE()";
+        String sql = "SELECT SUM(fine_amount) FROM borrow_record WHERE DATE(return_date) = CURDATE()";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -96,10 +96,10 @@ public class StatisticsDAO {
     }
     
     public List<Statistics> getBorrowTrend(int days) {
-        String sql = "SELECT DATE(borrow_time) as date, COUNT(*) as count " +
+        String sql = "SELECT DATE(borrow_date) as date, COUNT(*) as count " +
                      "FROM borrow_record " +
-                     "WHERE borrow_time >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
-                     "GROUP BY DATE(borrow_time) " +
+                     "WHERE borrow_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
+                     "GROUP BY DATE(borrow_date) " +
                      "ORDER BY date";
         List<Statistics> list = new ArrayList<>();
         Connection conn = null;

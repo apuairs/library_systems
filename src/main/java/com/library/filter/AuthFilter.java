@@ -16,22 +16,9 @@ import java.util.List;
 public class AuthFilter implements Filter {
     
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
-        "/login", "/login.jsp", "/register", "/register.jsp", "/logout", "/captcha", "/css/", "/js/", "/images/", "/index.jsp",
-        "/testlogin.jsp", "/fix.jsp", "/resetpwd.jsp", "/_debug_db.jsp", "/_test_"
-    );
-    
-    private static final List<String> USER_PATHS = Arrays.asList(
-        "/user/", "/profile", "/searchBook", "/borrowBook", "/returnBook", 
-        "/renewBook", "/reserveBook", "/seatReserve", "/seatCheckIn", 
-        "/seatCheckOut", "/cancelSeatReservation"
-    );
-    
-    private static final List<String> ALL_USER_PATHS = Arrays.asList(
-        "/api/"
-    );
-    
-    private static final List<String> ADMIN_PATHS = Arrays.asList(
-        "/admin/"
+        "/login", "/login.jsp", "/register", "/register.jsp", "/logout", "/captcha", 
+        "/css/", "/js/", "/images/", "/index.jsp", "/testlogin.jsp", "/fix.jsp", 
+        "/resetpwd.jsp", "/_debug_db.jsp", "/_test_", "/_debug_db_structure.jsp"
     );
     
     @Override
@@ -66,24 +53,21 @@ public class AuthFilter implements Filter {
             return;
         }
         
-        // 检查权限
-        if (isUserPath(path) && user.getRole() == 0) {
-            chain.doFilter(req, resp);
-            return;
+        // 已登录，检查路径
+        // /user/ 路径下的所有页面和相关 Servlet 都允许普通用户和管理员访问
+        // /admin/ 路径只允许管理员访问
+        if (path.startsWith("/admin/")) {
+            if (user.getRole() == 1) {
+                chain.doFilter(req, resp);
+                return;
+            } else {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "权限不足");
+                return;
+            }
         }
         
-        if (isAdminPath(path) && user.getRole() == 1) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        
-        if (isAllUserPath(path) && (user.getRole() == 0 || user.getRole() == 1)) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        
-        // 权限不足
-        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "权限不足");
+        // 其他路径（/user/ 开头、Servlet 等）都允许已登录用户访问
+        chain.doFilter(req, resp);
     }
     
     private boolean isPublicPath(String path) {
@@ -93,33 +77,6 @@ public class AuthFilter implements Filter {
             }
         }
         return path.equals("/") || path.isEmpty();
-    }
-    
-    private boolean isUserPath(String path) {
-        for (String p : USER_PATHS) {
-            if (path.startsWith(p)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean isAdminPath(String path) {
-        for (String p : ADMIN_PATHS) {
-            if (path.startsWith(p)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean isAllUserPath(String path) {
-        for (String p : ALL_USER_PATHS) {
-            if (path.startsWith(p)) {
-                return true;
-            }
-        }
-        return false;
     }
     
     @Override
